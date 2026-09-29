@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relief Camp Manager</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="/" aria-label="Relief Camp Manager home">
+            <span class="brand-mark" aria-hidden="true">RC</span>
+            <span>Relief Camp Manager</span>
+        </a>
+        <!-- <span class="connection"><span class="connection-dot"></span> API workspace</span> -->
+    </header>
+
+    <main class="page">
+        <section class="page-heading">
+            <div>
+                <p class="eyebrow">OPERATIONS</p>
+                <h1>Camp overview</h1>
+                <p class="subheading">Manage camp capacity, families, and essential supplies.</p>
+            </div>
+            <label class="camp-picker">
+                <span>Current camp</span>
+                <select id="camp-select" aria-label="Choose a camp">
+                    <option value="">Loading camps...</option>
+                </select>
+            </label>
+        </section>
+
+        <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+
+        <section class="camp-panel" aria-labelledby="camp-panel-title">
+            <div class="section-title-row">
+                <div>
+                    <p class="eyebrow">CAMP DETAILS</p>
+                    <h2 id="camp-panel-title">Camps</h2>
+                </div>
+                <div id="camp-actions" class="button-row" hidden>
+                    <button class="button button-secondary" type="button" data-action="edit-camp">Edit camp</button>
+                    <button class="button button-danger" type="button" data-action="delete-camp">Delete camp</button>
+                </div>
+            </div>
+
+            <div id="camp-summary" class="camp-summary">
+                <p class="empty-state">Create a camp or choose one to get started.</p>
+            </div>
+
+            <form id="camp-form" class="inline-form">
+                <label>
+                    <span>Camp name</span>
+                    <input name="name" type="text" placeholder="e.g. Riverside Camp" required maxlength="100">
+                </label>
+                <label>
+                    <span>Location</span>
+                    <input name="location" type="text" placeholder="Town or area" required maxlength="150">
+                </label>
+                <label class="capacity-input">
+                    <span>Capacity</span>
+                    <input name="capacity" type="number" min="1" placeholder="100" required>
+                </label>
+                <button class="button button-primary" type="submit">Add camp</button>
+            </form>
+        </section>
+
+        <nav class="tabs" aria-label="Camp management sections">
+            <button class="tab active" type="button" data-tab="families">Families</button>
+            <button class="tab" type="button" data-tab="inventory">Inventory</button>
+            <button class="tab" type="button" data-tab="distributions">Distributions</button>
+        </nav>
+
+        <section id="families-panel" class="tab-panel">
+            <div class="section-title-row">
+                <div>
+                    <p class="eyebrow">CAMP REGISTRY</p>
+                    <h2>Housed families</h2>
+                </div>
+                <span id="family-count" class="count-label">0 families</span>
+            </div>
+            <form id="family-form" class="inline-form">
+                <label>
+                    <span>Family name</span>
+                    <input name="familyName" type="text" placeholder="e.g. Patel family" required maxlength="100">
+                </label>
+                <label class="capacity-input">
+                    <span>People</span>
+                    <input name="headcount" type="number" min="1" placeholder="4" required>
+                </label>
+                <button class="button button-primary" type="submit">Check in family</button>
+            </form>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Family</th><th>People</th><th>Status</th><th class="actions-heading">Actions</th></tr></thead>
+                    <tbody id="families-list"><tr><td colspan="4" class="empty-state">Choose a camp to view families.</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="inventory-panel" class="tab-panel" hidden>
+            <div class="section-title-row">
+                <div>
+                    <p class="eyebrow">CAMP STOCK</p>
+                    <h2>Inventory</h2>
+                </div>
+            </div>
+            <form id="supply-form" class="inline-form">
+                <label>
+                    <span>Supply type</span>
+                    <select name="type" required>
+                        <option value="FOOD">Food</option>
+                        <option value="WATER">Water</option>
+                        <option value="BLANKETS">Blankets</option>
+                    </select>
+                </label>
+                <label class="capacity-input">
+                    <span>Quantity received</span>
+                    <input name="quantity" type="number" min="1" placeholder="10" required>
+                </label>
+                <button class="button button-primary" type="submit">Receive supplies</button>
+            </form>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Supply</th><th>Available quantity</th><th class="actions-heading">Actions</th></tr></thead>
+                    <tbody id="inventory-list"><tr><td colspan="3" class="empty-state">Choose a camp to view inventory.</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="distributions-panel" class="tab-panel" hidden>
+            <div class="section-title-row">
+                <div>
+                    <p class="eyebrow">SUPPLY RECORDS</p>
+                    <h2>Distributions</h2>
+                </div>
+            </div>
+            <form id="distribution-form" class="inline-form distribution-form">
+                <label>
+                    <span>Family</span>
+                    <select id="distribution-family" name="familyId" required><option value="">Choose a family</option></select>
+                </label>
+                <label>
+                    <span>Supply</span>
+                    <select id="distribution-supply" name="supplyId" required><option value="">Choose a supply</option></select>
+                </label>
+                <label class="capacity-input">
+                    <span>Quantity</span>
+                    <input name="quantity" type="number" min="1" placeholder="1" required>
+                </label>
+                <button class="button button-primary" type="submit">Record distribution</button>
+            </form>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Family</th><th>Supply</th><th>Quantity</th><th class="actions-heading">Actions</th></tr></thead>
+                    <tbody id="distributions-list"><tr><td colspan="4" class="empty-state">Choose a camp to view distributions.</td></tr></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
