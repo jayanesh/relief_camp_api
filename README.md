@@ -108,7 +108,3 @@ Business rule violations and missing records are returned as HTTP errors. For ex
 </p>
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the component breakdown, business flows, configuration details, and current risks and recommendations.
-
-## Configuration and Limitations
-
-Database connection settings are currently defined directly in `src/main/resources/application.properties`; move credentials to environment-specific configuration or a secret manager before deployment. The application has no authentication or authorization configured, and the current context-load test does not cover business rules or concurrent inventory updates. It is intended as a local/demo application until those concerns are addressed.
